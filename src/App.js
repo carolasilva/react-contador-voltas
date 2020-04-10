@@ -46,14 +46,15 @@ function App() {
   const reset = () => {
     setNumVoltas(0);
     setTempo(0);
+    toggleRunning();
   }
 
   const getTempo = () => {
-    if (!running)
-      return 0;
+    if (numVoltas > 0)
+      return Math.round(tempo/numVoltas);
     if (numVoltas === 0)
       return tempo;
-    return Math.round(tempo/numVoltas);
+    return 0;
   }
 
   return ( 
