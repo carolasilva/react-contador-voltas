@@ -1,38 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import './styles.css';
 
-const MostraVoltas = (props) => {
-  return (
-    <p>
-      {props.voltas}<br />
-    </p>
-  );
-}
+import MostraVoltas from './MostraVoltas';
+import MostraTempo from './MostraTempo';
+import Button from './Button';
 
-const MostraTempo = (props) => {
-  const tempo = props.tempo;
-  const minutos = Math.round(tempo / 60);
-  const segundos = tempo % 60;
-  const minutosStr = minutos < 10 ? '0' + minutos : minutos;
-  const segundosStr = segundos < 10 ? '0' + segundos : segundos;
-  return (
-    <p>
-      {`${minutosStr}:${segundosStr}`}<br />
-      Tempo médio por volta
-    </p>
-  );
-}
-
-const Button = (props) => <button onClick={props.onClick}>{props.text}</button>
 
 function App() {
   const [numVoltas, setNumVoltas] = useState(0);
   const [running, setRunning] = useState(false);
   const [tempo, setTempo] = useState(0);
 
-
-
   useEffect(() => {
-    let timer = null;
+    let timer = 0;
     
     if(running) {
       timer = setInterval(() => {
@@ -53,11 +33,14 @@ function App() {
   }
 
   const increment = () => {
+    if (numVoltas === 0 && !running)
+      toggleRunning();
     setNumVoltas(numVoltas + 1);
   }
 
   const decrement = () => {
-    setNumVoltas(numVoltas - 1);
+    if(numVoltas > 0)
+      setNumVoltas(numVoltas - 1);
   }
 
   const reset = () => {
@@ -65,16 +48,21 @@ function App() {
     setTempo(0);
   }
 
+  const getTempo = () => {
+    if (!running)
+      return 0;
+    if (numVoltas === 0)
+      return tempo;
+    return Math.round(tempo/numVoltas);
+  }
+
   return ( 
     <div className='App'>
       <MostraVoltas voltas={numVoltas} />
-      <Button text='+' onClick={increment} />
-      <Button text='-' onClick={decrement} />
-      {
-        numVoltas > 0 &&
-        <MostraTempo tempo={Math.round(tempo/numVoltas)} />
-      }
-      <Button text='Iniciar' onClick={toggleRunning} />
+      <Button text='+' className='bigger' onClick={increment} />
+      <Button text='-' className='bigger' onClick={decrement} />
+      <MostraTempo tempo={getTempo()} />
+      <Button text={ running ? 'Pausar' : 'Iniciar'} onClick={toggleRunning} />
       <Button onClick={reset} text='Reiniciar' />
     </div>
   );
