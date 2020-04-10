@@ -1,9 +1,33 @@
 import React from 'react';
 
-function App() {
+const MostraVoltas = (props) => {
   return (
-    <div className="App">
-      
+    <p>
+      {props.voltas}<br />
+    </p>
+  );
+}
+
+const MostraTempo = (props) => {
+  return (
+    <p>
+      {props.tempo}<br />
+      Tempo médio por volta
+    </p>
+  );
+}
+
+const Button = (props) => <button>{props.text}</button>
+
+function App() {
+  return ( 
+    <div className='App'>
+      <MostraVoltas voltas='12' />
+      <Button text='+' />
+      <Button text='-' />
+      <MostraTempo tempo='01:35' />
+      <Button text='Iniciar' />
+      <Button text='Reiniciar' />
     </div>
   );
 }
